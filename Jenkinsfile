@@ -35,10 +35,24 @@ pipeline {
                 echo "Waiting for approval..."
                 sleep(time: 10, unit: 'SECONDS')
             }
+            post {
+                always {
+                    emailext subject: "Pipeline Approval Notification",
+                              body: "The pipeline is awaiting approval.",
+                              to: "adhi2851@gmail.com"
+                }
+            }
         }
         stage('Deploy to Production') {
             steps {
                 echo "Deploy the code to the production environment: ${env.PRODUCTION_ENVIRONMENT}"
+            }
+            post {
+                always {
+                    emailext subject: "Pipeline Deployment Notification",
+                              body: "The pipeline has been deployed to production environment: ${env.PRODUCTION_ENVIRONMENT}.",
+                              to: "adhi2851@gmail.com"
+                }
             }
         }
     }
